@@ -60,6 +60,9 @@ body {
 
 /** Funções de Desligamento de tela **/
 
+.sectionEscondida {
+    display: none;
+}
 
 /************/
 
