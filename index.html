@@ -8,8 +8,18 @@
 </head>
 <body>
     
-    <main class="SensorDeMovimento">
-        <div class="fileira1" id="fileira">
+    <main>
+    
+    <section class="MenuPrincipal">
+        <h1>My Simulator &lt;3</h1>
+        <div class="menu_buttons">
+            <button id="buttonStartGame" class="buttonsOfTheMenu">Start The Game</button>
+            <button class="buttonsOfTheMenu">Show me a message</button>
+        </div>
+    </section>
+
+    <section id="JogoPrincipal" class="SensorDeMovimento menuEscondido">
+        <div class="fileira1" id="fileira"> 
             <div id="quadrado1" class="quadrado Q1"><div id="SpringTrap" class="animatronico"></div></div>
             <div id="quadrado2" class="quadrado Q2"></div>
             <div id="quadrado3" class="quadrado Q3"></div>
@@ -21,6 +31,8 @@
                 </button>
             </div>
         </div>
+    </section>
+
     </main>
     
     <script src="./app.js"></script>

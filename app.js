@@ -1,24 +1,18 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Coloque aqui todo o código que manipula o DOM
+// Autora: Kiara Victória
 
+const buttonStart = document.getElementById('buttonStartGame');
 
-//Dado para números aleatórios 
+function iniciarOJogo() {
+    const MenuPrincipal = document.getElementById('MenuPrincipal');
+    MenuPrincipal.style.display = 'none';
 
-const Dado = parseInt(Math.random() * 20);
-//Dado % 2 === 0;
-
-function dadobool(){
-    const db = parseInt(Math.random() * 10);
-    if(db % 2 === 0){
-    return true
-    } else {
-    return false
-    }
+    const jogoPrincipal = document.getElementById('JogoPrincipal');
+    jogoPrincipal.style.display = 'flex';
 }
 
+/////////////////////////////////////////
 
-let i = 1;
-
+const animatronicElement = document.getElementById('SpringTrap');
 const fileira = document.getElementById('fileira');
 const quadrado1 = document.getElementById('quadrado1');
 const quadrado2 = document.getElementById('quadrado2');
@@ -33,27 +27,23 @@ botaoTrancar.appendChild(trancaDaSala);
 trancaDaSala.src = './assets/151537.svg';
 trancaDaSala.classList.add('trancaDaSala')
 
-const animatronicElement = document.getElementById('SpringTrap');
+
+function dadobool(){
+    const db = parseInt(Math.random() * 10);
+    if(db % 2 === 0){
+    return true
+    } else {
+    return false
+    }
+}
+
+
+let i = 0;
+
 
 const SalasPossíveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
 
 let portasAbertas = true;
-
-function trancarPortas() {
-
-    if (!botaoTrancar.contains(trancaDaSala) && portasAbertas) {
-        botaoTrancar.appendChild(trancaDaSala);
-        portasAbertas = false;
-    } else {
-        botaoTrancar.removeChild(trancaDaSala);
-        portasAbertas = true;
-    }
-
-    console.log(portasAbertas);
-    
-}
-
-botaoTrancar.addEventListener('click', trancarPortas());
 
 const animatronic = {
     nome: 'Springtrap',
@@ -62,11 +52,36 @@ const animatronic = {
     posicao: quadrado1,
     
     moverParaSala(sala) {
-        this.posicao = sala;
-        sala.appendChild(animatronicElement);
-        animatronicElement.style.left = `${sala * 20}%`; // este código será realizado após o animatronico se mexer, irá leva-lo para a esquerda
+        if (SalasPossíveis.includes(sala)) {
+            this.posicao = sala;
+            sala.appendChild(animatronicElement);
+        }
     }
 };
+
+function trancarPortas() {
+
+    if (!botaoTrancar.contains(trancaDaSala) && portasAbertas) {
+        botaoTrancar.appendChild(trancaDaSala);
+
+        const indice = SalasPossíveis.indexOf(SalaDoBoss);
+        if (indice !== -1) {
+            SalasPossíveis.splice(indice, 1); // Remove a SalaDoBoss das salas possíveis
+            console.log(SalasPossíveis);
+            
+        }
+        portasAbertas = false;
+    } else {
+        botaoTrancar.removeChild(trancaDaSala);
+        if (!SalasPossíveis.includes(SalaDoBoss)) {
+            SalasPossíveis.push(SalaDoBoss); // Reinsere a SalaDoBoss nas salas possíveis
+            console.log(SalasPossíveis);
+        }
+        portasAbertas = true;
+    
+}}
+
+botaoTrancar.addEventListener('click', trancarPortas());
 
 //A cada 5 segundos o animatrônic deve se mover para uma sala
 
@@ -74,13 +89,17 @@ let gameOver = false;
 
 const IdIntervalo = setInterval(() => {
 
+    const Dado = parseInt(Math.random() * 20);
+    console.log(Dado);
+    
+    if (animatronic.dificuldade >= Dado) {
         if (dadobool() == true) {
-            i++;
-            animatronic.moverParaSala(SalasPossíveis[i]);
+            if (i < SalasPossíveis.length - 1) {
+                i++;
+                animatronic.moverParaSala(SalasPossíveis[i]);
+            }
         } else {
-            if (i === 0) {
-                i + 1;
-            } else {
+            if (i > 0) {
                 i--;
                 animatronic.moverParaSala(SalasPossíveis[i]);
             }
@@ -95,11 +114,7 @@ const IdIntervalo = setInterval(() => {
             }
             console.log('Game Over');
         }
+    }
+}, 1000); // 5000 milissegundos = 5 segundos 
 
-    }, 1000); // 5000 milissegundos = 5 segundos
-    
-
-    botaoTrancar.onclick = trancarPortas;
-
-});
-
+botaoTrancar.onclick = trancarPortas;
