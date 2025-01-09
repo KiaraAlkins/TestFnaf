@@ -38,7 +38,7 @@ function InicializacaoDoJogo() {
     trancaDaSala.classList.add('trancaDaSala')
 
     function dadobool(){
-        const db = parseInt(Math.random() * 10);
+        const db = parseInt(2)
         if(db % 2 === 0){
         return true
         } else {
@@ -46,9 +46,7 @@ function InicializacaoDoJogo() {
         }
     }
 
-
     let i = 0;
-
 
     const SalasPossíveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
 
@@ -119,6 +117,23 @@ function InicializacaoDoJogo() {
                 if (gameOver) {
                     clearInterval(IdIntervalo);
                     console.log('Game Over');
+                
+                    TheGame.classList.remove('SensorDeMovimento');
+                    TheGame.classList.add('sectionEscondida');
+
+                    const telaJumpscare = document.getElementById('Jumpscare');
+                    telaJumpscare.classList.remove('sectionEscondida');
+                    telaJumpscare.classList.add('Jumpscare');
+                    const videoJumpscare = document.getElementById('meuVideo');
+                    if (videoJumpscare.paused) {
+                        videoJumpscare.play();
+                    }
+
+                    videoJumpscare.addEventListener('ended', function() {
+                        
+                    })
+
+
                     return
                 }
                 console.log('Game Over');
@@ -127,3 +142,26 @@ function InicializacaoDoJogo() {
     }, 1000); // 5000 milissegundos = 5 segundos 
 
 }
+
+
+
+    // // Obtém o vídeo e o botão de play
+    // const video = document.getElementById('meuVideo');
+    // const botaoPlay = document.getElementById('botaoPlay');
+    
+    // // Função para dar play no vídeo
+    // botaoPlay.addEventListener('click', function() {
+    //     // Verifica se o vídeo está pausado
+    //     if (video.paused) {
+    //         video.play();  // Dá play no vídeo
+    //         botaoPlay.textContent = "Pausar"; // Muda o texto do botão para "Pausar"
+    //     } else {
+    //         video.pause();  // Pausa o vídeo
+    //         botaoPlay.textContent = "Dar Play"; // Muda o texto do botão para "Dar Play"
+    //     }
+    // });
+    
+    // // Evento para quando o vídeo terminar
+    // video.addEventListener('ended', function() {
+    //     botaoPlay.textContent = "Dar Play"; // Resetando o texto para "Dar Play" quando o vídeo terminar
+    // });
