@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #0e106e;
     display: flex;
     justify-content: center;
     height: 100vh;
@@ -20,15 +20,16 @@ body {
     justify-content: center;
     width: 300px;
     height: 300px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #0e106e;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 .MenuPrincipal h1 {
     margin-bottom: 20px;
+    color: #fff;
 }
 
 .menu_buttons {
@@ -49,8 +50,9 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 15px;
-    color: #333;
-    background-color: #c4adad;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #0e106e;
 }
 
 .buttonsOfTheMenu:hover {
@@ -76,7 +78,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 20px;
-    background-color: #fff;
+    background-color: #0e106e;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -100,6 +102,11 @@ body {
     font-size: 20px;
     color: #333;
     background-color: #911616;
+}
+
+.Jumpscare {
+    width: 600
+    background-color: black;
 }
 
 .quadrado:hover {

@@ -22,7 +22,8 @@ buttonStart.addEventListener('click', iniciarOJogo);
 
 function InicializacaoDoJogo() {
 
-    const animatronicElement = document.getElementById('SpringTrap');
+    const animatronicElement = document.getElementById('SpringTrap');00000
+
     const fileira = document.getElementById('fileira');
     const quadrado1 = document.getElementById('quadrado1');
     const quadrado2 = document.getElementById('quadrado2');
@@ -33,8 +34,7 @@ function InicializacaoDoJogo() {
     const botaoTrancar = document.getElementById('botaoTrancar');
     SalaDoBoss.appendChild(botaoTrancar);
     const trancaDaSala = document.getElementById('trancaDaSala')
-    botaoTrancar.appendChild(trancaDaSala);
-    trancaDaSala.src = './assets/151537.svg';
+    trancaDaSala.src = ('./assets/151537.svg');
     trancaDaSala.classList.add('trancaDaSala')
 
     function dadobool(){
@@ -70,7 +70,6 @@ function InicializacaoDoJogo() {
 
         if (!botaoTrancar.contains(trancaDaSala) && portasAbertas) {
             botaoTrancar.appendChild(trancaDaSala);
-
             const indice = SalasPossíveis.indexOf(SalaDoBoss);
             if (indice !== -1) {
                 SalasPossíveis.splice(indice, 1); // Remove a SalaDoBoss das salas possíveis
@@ -130,10 +129,12 @@ function InicializacaoDoJogo() {
                     }
 
                     videoJumpscare.addEventListener('ended', function() {
-                        
+                        telaJumpscare.classList.remove('Jumpscare');
+                        telaJumpscare.classList.add('sectionEscondida');
+                        MenuPrincipal.classList.remove('sectionEscondida');
+                        MenuPrincipal.classList.add('MenuPrincipal');
+
                     })
-
-
                     return
                 }
                 console.log('Game Over');
