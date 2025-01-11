@@ -1,5 +1,6 @@
 //criação do menu principal
 
+const main = document.querySelector('main')
 const MenuPrincipal = document.getElementById('MenuPrincipal');
 const buttonStart = document.getElementById('buttonStartGame');
 
@@ -43,7 +44,7 @@ function InicializacaoDoJogo(TheGame) {
 
     const fileira = document.createElement('div');
     fileira.id = 'fileira';
-    fileira.classList.add('fileira');
+    fileira.classList.add('fileira1');
     TheGame.appendChild(fileira);
     
     const quadrado1 = document.createElement('div');
@@ -80,52 +81,25 @@ function InicializacaoDoJogo(TheGame) {
     SalaDoBoss.appendChild(botaoTrancar);
 
     const trancaDaSala = document.createElement('img');
-    trancaDaSala.id = 'trancaDaSala';
     trancaDaSala.src = ('./assets/151537.svg');
     trancaDaSala.classList.add('trancaDaSala');
+    trancaDaSala.style.display = 'none';
     botaoTrancar.appendChild(trancaDaSala);
-
-    const portasAbertas = true;
-
-    function trancarPortas() {
-        if (portasAbertas) {
-            const trancaDaSala = document.createElement('img');
-            trancaDaSala.src = ('./assets/151537.svg');
-            trancaDaSala.classList.add('trancaDaSala');
-            botaoTrancar.appendChild(trancaDaSala);
-            portasAbertas = false;
-
-            const indice = SalasPossíveis.indexOf(animatronic.posicao);
-
-            if (indice !== -1) {
-                SalasPossíveis.splice(indice, 1);
-            }
-        } else {
-            trancaDaSala.remove();
-            portasAbertas = true;
-            if (!SalasPossíveis.includes(SalaDoBoss)) {
-                SalasPossíveis.push(SalaDoBoss);
-            }
-        }
-    }
-
-    function dadobool(){
-        const db = parseInt(2)
-        if(db % 2 === 0){
-        return true
-        } else {
-        return false
-        }
-    }
-
-    let i = 0;
-    const SalasPossíveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
 
     //*************//
 
-    //Dados//
+    //Tempo para a pizza ficar pronta
 
-    let GameOver = false;
+    const tempoPizza = document.createElement('div');
+    tempoPizza.id = 'tempoPizza';
+    tempoPizza.classList.add('tempoPizza');
+    TheGame.appendChild(tempoPizza);
+    const tempoPizzaTexto = document.createElement('p');
+    tempoPizza.appendChild(tempoPizzaTexto);
+    let relogio = 0;
+    tempoPizzaTexto.innerText = relogio + ":00 AM";
+
+    ////
 
     const animatronic = {
         nome: 'Springtrap',
@@ -134,39 +108,164 @@ function InicializacaoDoJogo(TheGame) {
         posicao: quadrado1,
         
         moverParaSala(sala) {
-            if (SalasPossíveis.includes(sala)) {
+            if (SalasPossiveis.includes(sala)) {
                 this.posicao = sala;
                 sala.appendChild(animatronicElement);
             }
         }
     }
+
+    let tempoDeGasto = 1000;
+    let portasAbertas = true;
+
+    function trancarPortas() {
+        if (portasAbertas) {
+            trancaDaSala.style.display = 'block';
+            portasAbertas = false;
+            const indice = SalasPossiveis.indexOf(SalaDoBoss);
+            if (indice !== -1) {
+                SalasPossiveis.splice(indice, 1);
+            }
+            console.log(SalasPossiveis);
+        } else {
+            trancaDaSala.style.display = 'none';
+            if (!SalasPossiveis.includes(SalaDoBoss)) {
+                SalasPossiveis.push(SalaDoBoss);
+            }
+            portasAbertas = true;
+            console.log(SalasPossiveis);
+        }
+        if (portasAbertas) {
+            return tempoDeGasto = 1000;
+        } else {
+            return tempoDeGasto = 50;
+        }
+    }
+
+    let GameWin = false
+
+    function UWinTheGame() {
+        TheGame.remove();
+        const GameWinSection = document.createElement('section');
+        GameWinSection.classList.add('YouWin');
+        main.appendChild(GameWinSection);
+        const GWDiv = document.createElement('div');
+        GWDiv.classList.add('YouWinContent');
+        const GWTitle = document.createElement('h1');
+        GWTitle.innerText = 'You win!';
+        const GWText = document.createElement('p');
+        GWText.innerText = 'You did the perfect pizza! Congratulations!';
+        const GWButton = document.createElement('button');
+        GWButton.innerText = 'Restart Game';
+        GWButton.classList.add('buttonRestart');
+        GameWinSection.appendChild(GWDiv);
+        GWDiv.appendChild(GWTitle);
+        GWDiv.appendChild(GWText);
+        GameWinSection.appendChild(GWButton);
+        GWButton.addEventListener('click', () => {
+            MenuPrincipal.classList.remove('sectionEscondida');
+            MenuPrincipal.classList.add('MenuPrincipal');
+            GameWinSection.remove();
+        });
+    }
+
+    function dadobool(){
+        const db = parseInt(2);
+        if(db % 2 === 0){
+        return true
+        } else {
+        return false
+        }
+    }
+
+    let i = 0;
+    const SalasPossiveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
+
+    botaoTrancar.addEventListener('click', trancarPortas);
+
+    //*************//
+
+    //Dados//
+
+    let GameOver = false;
+
+
     
     //
+
+    const relogioAndando = setInterval(() => {
+        if (relogio < 6) { 
+            relogio++;
+        } else {
+            clearInterval(relogioAndando);
+            GameWin = true;
+            if (GameWin) {
+                clearInterval(IdIntervalo);
+                console.log('You Win');
+                UWinTheGame();
+                return
+            }
+        }
+        return tempoPizzaTexto.innerText = `${relogio}:00 AM`;
+    }, 1500);
 
     const gastoDaBateria = setInterval(() => {
         if (numeroDaPorcentagem > 0) {
             numeroDaPorcentagem--; 
-        } else {
+        } else {GameOver = true;
+            clearInterval(gastoDaBateria);
             clearInterval(IdIntervalo);
-            GameOver = true;
+
+            // Finalizar o jogo aqui
+            console.log('Game Over - Bateria Zerada');
+            TheGame.remove();
+
+            const telaJumpscare = document.createElement('section');
+            telaJumpscare.classList.add('Jumpscare');
+
+            const main = document.querySelector('main');
+            main.appendChild(telaJumpscare);
+
+            const videoJumpscare = document.createElement('video');
+            videoJumpscare.src = ('./assets/FNaF 4 Plushtrap Jumpscare.mp4');
+            telaJumpscare.appendChild(videoJumpscare);
+            const fonteVideo = document.createElement('source');
+            fonteVideo.src = ('./assets/FNaF 4 Plushtrap Jumpscare.mp4');
+            fonteVideo.type = 'video/mp4';
+            videoJumpscare.appendChild(fonteVideo);
+
+            if (videoJumpscare.paused) {
+                videoJumpscare.play();
+            }
+
+            videoJumpscare.addEventListener('ended', function() {
+                telaJumpscare.remove();
+                MenuPrincipal.classList.remove('sectionEscondida');
+                MenuPrincipal.classList.add('MenuPrincipal');
+            });
+
+            videoJumpscare.addEventListener('error', (e) => {
+                console.error('Erro ao carregar o vídeo:', e);
+            });
         }
-    }, 5000);
+        return porcentagemBateria.innerText = `${numeroDaPorcentagem}%`;
+    }, tempoDeGasto);
 
     const IdIntervalo = setInterval(() => {
         
         const Dado = Math.floor(Math.random() * 10) + 1;
         console.log(Dado);
 
-        if (1 <= animatronic.dificuldade) {
+        if (5 <= animatronic.dificuldade) {
             if (dadobool()) {
-                if (i < SalasPossíveis.length - 1) {
+                if (i < SalasPossiveis.length - 1) {
                     i++;
-                    animatronic.moverParaSala(SalasPossíveis[i]);
+                    animatronic.moverParaSala(SalasPossiveis[i]);
                 } 
             } else {
                 if (i > 0) {
                     i--;
-                    animatronic.moverParaSala(SalasPossíveis[i]);
+                    animatronic.moverParaSala(SalasPossiveis[i]);
                 }
             }
 
@@ -174,15 +273,15 @@ function InicializacaoDoJogo(TheGame) {
                 GameOver = true;
                 if (GameOver) {
                     clearInterval(IdIntervalo);
+                    clearInterval(relogioAndando);
                     console.log('Game Over');
                     clearInterval(gastoDaBateria);
-
+               
                     TheGame.remove();
 
                     const telaJumpscare = document.createElement('section');
                     telaJumpscare.classList.add('Jumpscare');
 
-                    const main = document.querySelector('main');
                     main.appendChild(telaJumpscare);
 
                     const videoJumpscare = document.createElement('video');
