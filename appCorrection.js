@@ -3,8 +3,25 @@
 const main = document.querySelector('main')
 const MenuPrincipal = document.getElementById('MenuPrincipal');
 const buttonStart = document.getElementById('buttonStartGame');
+const buttonMensage = document.getElementById('buttonExtra');
+
+const numeracao = document.createElement('input')
+numeracao.type = 'number';
+numeracao.min = '1';
+numeracao.max = '20';
+let numeroDaDificuldade = 5;
+
+let jogoEmExecução = false;
 
 function iniciarOJogo() {
+    if (jogoEmExecução) {
+        return
+    }
+    jogoEmExecução = true;
+
+    const jogoExistente = document.getElementById('JogoPrincipal');
+    if (jogoExistente) jogoExistente.remove();
+
     MenuPrincipal.classList.remove('MenuPrincipal');
     MenuPrincipal.classList.add('sectionEscondida');
 
@@ -16,9 +33,50 @@ function iniciarOJogo() {
     InicializacaoDoJogo(TheGame);
 }
 
+
 buttonStart.addEventListener('click', iniciarOJogo);
 
+function extraMenu(params) {
+    MenuPrincipal.classList.remove('MenuPrincipal');
+    MenuPrincipal.classList.add('sectionEscondida');
+    const MenuDosExtras = document.createElement('section');
+    MenuDosExtras.classList.add('MenuExtra');
+    document.body.appendChild(MenuDosExtras);
+    const DivInputsExtras = document.createElement('div');
+    MenuDosExtras.appendChild(DivInputsExtras);
+    DivInputsExtras.classList.add('DivButtonsExtras');
+    
+    const buttonBack = document.createElement('button');
+    buttonBack.classList.add('buttonsOfTheMenu');
+    DivInputsExtras.appendChild(buttonBack);
+    buttonBack.innerText = 'Voltar'
+
+    numeracao.classList.add('inputDificuldade')
+    DivInputsExtras.appendChild(numeracao)
+
+
+    buttonBack.addEventListener('click', () => {
+        numeroDaDificuldade = numeracao.value
+        MenuDosExtras.remove();
+        DivInputsExtras.removeChild(numeracao);
+        MenuPrincipal.classList.remove('sectionEscondida');
+        MenuPrincipal.classList.add('MenuPrincipal');
+        return numeroDaDificuldade
+    })
+
+    
+}
+
+buttonMensage.addEventListener('click', extraMenu)
+
 function InicializacaoDoJogo(TheGame) {
+
+
+    if (numeroDaDificuldade == '') {
+        numeroDaDificuldade = parseInt((Math.random() * 5) + 5);
+    }
+    
+    console.log(numeroDaDificuldade);
     
     const animatronicElement = document.createElement('div');
     animatronicElement.id = 'SpringTrap';
@@ -103,7 +161,7 @@ function InicializacaoDoJogo(TheGame) {
 
     const animatronic = {
         nome: 'Springtrap',
-        dificuldade: 5,
+        dificuldade: numeroDaDificuldade,
         elemento: animatronicElement,
         posicao: quadrado1,
         
@@ -115,7 +173,8 @@ function InicializacaoDoJogo(TheGame) {
         }
     }
 
-    let tempoDeGasto = 1000;
+
+    let tempoDeGasto = 2000;
     let portasAbertas = true;
 
     function trancarPortas() {
@@ -128,18 +187,15 @@ function InicializacaoDoJogo(TheGame) {
             if (indice !== -1) {
                 SalasPossiveis.splice(indice, 1);
             }
-            console.log(SalasPossiveis);
-            tempoDeGasto = parseInt(50);
+            console.log
+            tempoDeGasto = parseInt(200);
         } else {
             if (!SalasPossiveis.includes(SalaDoBoss)) {
                 SalasPossiveis.push(SalaDoBoss);
             }
             portasAbertas = true;
-            console.log(SalasPossiveis);
-            tempoDeGasto = parseInt(1000);
+            tempoDeGasto = parseInt(2000);
         }
-        console.log(tempoDeGasto)
-        console.log(portasAbertas)
         
         clearTimeout(bateriaTimeout);
         bateriaTimeout = setTimeout(gastoDaBateria, tempoDeGasto);
@@ -147,10 +203,32 @@ function InicializacaoDoJogo(TheGame) {
 
     let GameWin = false
 
+    function dadobool(){
+        const db = parseInt(Math.random() * 10);
+        if(db > 3){
+        return true
+        } else {
+        return false
+        }
+    }
+
+    let i = 0;
+    const SalasPossiveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
+
+    botaoTrancar.addEventListener('click', trancarPortas);
+
+    //*************//
+
+    //Dados//
+
+    let GameOver = false;
+
     function UWinTheGame() {
         TheGame.remove();
         clearInterval(relogioAndando);
-        clearInterval(bateriaTimeout);
+        
+        clearTimeout(bateriaTimeout);
+        clearTimeout(bateriaTimeout);
         clearInterval(IdIntervalo);
         const GameWinSection = document.createElement('section');
         GameWinSection.classList.add('YouWin');
@@ -175,41 +253,20 @@ function InicializacaoDoJogo(TheGame) {
         });
     }
 
-    function dadobool(){
-        const db = parseInt(Math.random() * 10);
-        if(db % 2 === 0){
-        return true
-        } else {
-        return false
-        }
-    }
-
-    let i = 0;
-    const SalasPossiveis = [quadrado1, quadrado2, quadrado3, quadrado4, quadrado5, SalaDoBoss];
-
-    botaoTrancar.addEventListener('click', trancarPortas);
-
-    //*************//
-
-    //Dados//
-
-    let GameOver = false;
-
     const relogioAndando = setInterval(() => {
-        if (relogio < 6) { 
+        if (relogio < 5) { 
             relogio++;
         } else {
             clearInterval(relogioAndando);
             GameWin = true;
             if (GameWin) {
                 clearInterval(IdIntervalo);
-                console.log('You Win');
                 UWinTheGame();
                 return
             }
         }
         return tempoPizzaTexto.innerText = `${relogio}:00 AM`;
-    }, 5000);
+    }, 10000);
 
     function gastoDaBateria() {
         if (numeroDaPorcentagem > 0) {
@@ -217,10 +274,10 @@ function InicializacaoDoJogo(TheGame) {
             porcentagemBateria.innerText = `${numeroDaPorcentagem}%`;
         } else {
             GameOver = true;
-            clearInterval(gastoDaBateria);
+            clearTimeout(bateriaTimeout);
+            clearInterval(relogioAndando);
             clearInterval(IdIntervalo);
             // Finalizar o jogo aqui
-            console.log('Game Over - Bateria Zerada');
             TheGame.remove();
 
             const telaJumpscare = document.createElement('section');
@@ -260,11 +317,8 @@ function InicializacaoDoJogo(TheGame) {
     const IdIntervalo = setInterval(() => {
         
         const Dado = Math.floor(Math.random() * 10) + 1;
-        console.log(Dado);
 
         if (Dado <= animatronic.dificuldade) {
-            console.log(dadobool());
-            
             if (dadobool()) {
                 if (i < SalasPossiveis.length - 1) {
                     i++;
@@ -283,7 +337,7 @@ function InicializacaoDoJogo(TheGame) {
                     clearInterval(IdIntervalo);
                     clearInterval(relogioAndando);
                     console.log('Game Over');
-                    clearInterval(gastoDaBateria);
+                    clearTimeout(bateriaTimeout);
                
                     TheGame.remove();
 
