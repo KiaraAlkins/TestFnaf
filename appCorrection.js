@@ -119,33 +119,39 @@ function InicializacaoDoJogo(TheGame) {
     let portasAbertas = true;
 
     function trancarPortas() {
+
+        trancaDaSala.style.display = !portasAbertas ? 'none' : 'block';
+
         if (portasAbertas) {
-            trancaDaSala.style.display = 'block';
             portasAbertas = false;
             const indice = SalasPossiveis.indexOf(SalaDoBoss);
             if (indice !== -1) {
                 SalasPossiveis.splice(indice, 1);
             }
             console.log(SalasPossiveis);
+            tempoDeGasto = parseInt(50);
         } else {
-            trancaDaSala.style.display = 'none';
             if (!SalasPossiveis.includes(SalaDoBoss)) {
                 SalasPossiveis.push(SalaDoBoss);
             }
             portasAbertas = true;
             console.log(SalasPossiveis);
+            tempoDeGasto = parseInt(1000);
         }
-        if (portasAbertas) {
-            return tempoDeGasto = 1000;
-        } else {
-            return tempoDeGasto = 50;
-        }
+        console.log(tempoDeGasto)
+        console.log(portasAbertas)
+        
+        clearTimeout(bateriaTimeout);
+        bateriaTimeout = setTimeout(gastoDaBateria, tempoDeGasto);
     }
 
     let GameWin = false
 
     function UWinTheGame() {
         TheGame.remove();
+        clearInterval(relogioAndando);
+        clearInterval(bateriaTimeout);
+        clearInterval(IdIntervalo);
         const GameWinSection = document.createElement('section');
         GameWinSection.classList.add('YouWin');
         main.appendChild(GameWinSection);
@@ -170,7 +176,7 @@ function InicializacaoDoJogo(TheGame) {
     }
 
     function dadobool(){
-        const db = parseInt(2);
+        const db = parseInt(Math.random() * 10);
         if(db % 2 === 0){
         return true
         } else {
@@ -189,10 +195,6 @@ function InicializacaoDoJogo(TheGame) {
 
     let GameOver = false;
 
-
-    
-    //
-
     const relogioAndando = setInterval(() => {
         if (relogio < 6) { 
             relogio++;
@@ -207,15 +209,16 @@ function InicializacaoDoJogo(TheGame) {
             }
         }
         return tempoPizzaTexto.innerText = `${relogio}:00 AM`;
-    }, 1500);
+    }, 5000);
 
-    const gastoDaBateria = setInterval(() => {
+    function gastoDaBateria() {
         if (numeroDaPorcentagem > 0) {
             numeroDaPorcentagem--; 
-        } else {GameOver = true;
+            porcentagemBateria.innerText = `${numeroDaPorcentagem}%`;
+        } else {
+            GameOver = true;
             clearInterval(gastoDaBateria);
             clearInterval(IdIntervalo);
-
             // Finalizar o jogo aqui
             console.log('Game Over - Bateria Zerada');
             TheGame.remove();
@@ -247,16 +250,21 @@ function InicializacaoDoJogo(TheGame) {
             videoJumpscare.addEventListener('error', (e) => {
                 console.error('Erro ao carregar o vídeo:', e);
             });
+            return
         }
-        return porcentagemBateria.innerText = `${numeroDaPorcentagem}%`;
-    }, tempoDeGasto);
+        bateriaTimeout = setTimeout(gastoDaBateria, tempoDeGasto)
+    };
+
+    let bateriaTimeout = setTimeout(gastoDaBateria, tempoDeGasto);
 
     const IdIntervalo = setInterval(() => {
         
         const Dado = Math.floor(Math.random() * 10) + 1;
         console.log(Dado);
 
-        if (5 <= animatronic.dificuldade) {
+        if (Dado <= animatronic.dificuldade) {
+            console.log(dadobool());
+            
             if (dadobool()) {
                 if (i < SalasPossiveis.length - 1) {
                     i++;
