@@ -13,6 +13,8 @@ let numeroDaDificuldade = 5;
 
 let jogoEmExecução = false;
 
+//Só tô escrevendo isso pra poder dar o commit
+
 function iniciarOJogo() {
     if (jogoEmExecução) {
         return
